@@ -23,4 +23,7 @@ public abstract class Tree {
 	
 	// lookup one person by gene
 	public abstract Person lookup(String gene);
+	
+	// get the height of this tree with the height being the depth of the deepest leaf node
+	public abstract int getHeight();
 }
