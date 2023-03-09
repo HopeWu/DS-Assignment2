@@ -40,5 +40,10 @@ public class BinarySearchTree extends Tree {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
 

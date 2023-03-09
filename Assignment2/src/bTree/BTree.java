@@ -36,4 +36,9 @@ public class BTree extends Tree{
 		return null;
 	}
 
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

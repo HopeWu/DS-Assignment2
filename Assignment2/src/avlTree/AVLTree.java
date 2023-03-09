@@ -36,4 +36,9 @@ public class AVLTree extends Tree{
 		return null;
 	}
 
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
