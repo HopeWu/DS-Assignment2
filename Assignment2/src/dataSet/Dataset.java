@@ -24,12 +24,11 @@ public class Dataset {
 		/**
 		 * For testing
 		 */
-		Dataset dataset = new Dataset(100);
+		Dataset dataset = new Dataset(500);
 		Person[] people = dataset.getData();
 		for (int i = 0; i < people.length; ++i) {
 			System.out.print(i + " ");
 			System.out.println(people[i]);
-			System.out.flush();
 		}
 	}
 
@@ -168,9 +167,10 @@ public class Dataset {
 	 * @return a person who has the next index
 	 */
 	private Person chooseSpouse(int i) {
-		if (i >= population)
-			return null;
-		return this.people[i + 1];
+		if (i < population - 1)
+			return this.people[i + 1];
+		return null;
+		
 	}
 
 	/**
