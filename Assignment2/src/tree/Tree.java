@@ -1,7 +1,7 @@
 package tree;
 
 import node.Node;
-import person.Person;
+import personPackage.Person;
 
 public abstract class Tree {
 	/**

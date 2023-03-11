@@ -1,9 +1,9 @@
 package testdrive;
 
 import binarySearchTree.BinarySearchTree;
-import data.Dataset;
+import dataSet.Dataset;
 import node.Node;
-import person.Person;
+import personPackage.Person;
 import tree.Tree;
 
 public class TestDrive {
@@ -12,7 +12,7 @@ public class TestDrive {
 		// create Dataset object to generate test data
 		Dataset dataset = new Dataset();
 		// set the amount of data we are going to get
-		dataset.setScale(10000);
+		dataset.setPopulation(10000);
 		// get the data, which is a family tree
 		Person[] people = dataset.getData();
 		
