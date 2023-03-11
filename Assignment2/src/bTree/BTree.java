@@ -1,7 +1,7 @@
 package bTree;
 
 import node.Node;
-import person.Person;
+import personPackage.Person;
 import tree.Tree;
 
 public class BTree extends Tree{

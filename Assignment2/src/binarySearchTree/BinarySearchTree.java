@@ -1,7 +1,7 @@
 package binarySearchTree;
 
 import node.Node;
-import person.Person;
+import personPackage.Person;
 import tree.Tree;
 
 public class BinarySearchTree extends Tree {

@@ -1,7 +1,7 @@
 package avlTree;
 
 import node.Node;
-import person.Person;
+import personPackage.Person;
 import tree.Tree;
 
 public class AVLTree extends Tree{
