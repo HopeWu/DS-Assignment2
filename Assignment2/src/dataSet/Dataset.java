@@ -120,7 +120,7 @@ public class Dataset {
 			// choose children for this parent and set their birthdays
 			children = getChildrenFor(i, hasParents);
 			// if no children, skip
-			if (children.isEmpty())
+			if (children == null || children.isEmpty())
 				continue;
 			// get the birthday of the oldest from children
 			oldestBirthday = oldestBirthdayOf(children);
