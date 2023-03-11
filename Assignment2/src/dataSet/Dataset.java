@@ -1,7 +1,9 @@
 package dataSet;
 
 import java.util.*;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 
 import personPackage.Person;
 
@@ -22,12 +24,21 @@ public class Dataset {
 		/**
 		 * For testing
 		 */
-		Dataset dataset = new Dataset();
+		Dataset dataset = new Dataset(100);
 		Person[] people = dataset.getData();
-		for (int i = 0; i < people.length; ++i) {
-			System.out.print(i+" ");
-			System.out.println(people[i]);
-		}
+//		for (int i = 0; i < people.length; ++i) {
+//			System.out.print(i + " ");
+//			System.out.println(people[i]);
+//			System.out.flush();
+//		}
+	}
+
+	public Dataset(int scale) {
+		super();
+		this.population = scale;
+		this.relationRate = 1;
+		people = new Person[population];
+		this.random = new Random();
 	}
 
 	public Dataset() {
@@ -94,21 +105,11 @@ public class Dataset {
 			// choose a spouse for this parent
 			spouse = chooseSpouse(i);
 			// no spouse no children
-			if (spouse == null) continue;
+			if (spouse == null)
+				continue;
 			// set the marriage relationship
 			person.spouse = spouse;
 			spouse.spouse = person;
-			// choose children for this parent and set their birthdays
-			children = getChildrenFor(i, hasParents);
-			// if no children, skip
-			if (children.isEmpty())
-				continue;
-			// get the birthday of the oldest from children
-			oldestBirthday = maxBirthdayOf(children);
-			// set the parent's birthday that is N(23, 6) years earlier than the oldest
-			// child. as least 17 years older
-			person.birthday = oldestBirthday.minusYears(Math.min((long) random.nextGaussian(23, 6), 18)).minusDays(random.nextLong(365));
-
 			// set the couples' name and gender
 			name1 = gendernames.getAMaleName();
 			name2 = gendernames.getAFemaleName();
@@ -116,8 +117,23 @@ public class Dataset {
 			person.gender = name1.getGender();
 			spouse.name = name2.getName();
 			spouse.gender = name2.getGender();
+			// choose children for this parent and set their birthdays
+			children = getChildrenFor(i, hasParents);
+			// if no children, skip
+			if (children.isEmpty())
+				continue;
+			// get the birthday of the oldest from children
+			oldestBirthday = oldestBirthdayOf(children);
+			// set the parent's birthday that is N(23, 6) years earlier than the oldest
+			// child. as least 17 years older
+
+			person.birthday = oldestBirthday.minusYears(Math.max((long) random.nextGaussian(23, 6), 18))
+					.minusDays(random.nextLong(365));
+			System.out.print(oldestBirthday + " ");
+			System.out.println(person.birthday);
 			// set the spouse's birthday to N(partner's birthday, 2)
-			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2))).minusDays(random.nextLong(365));
+			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2)))
+					.minusDays(random.nextLong(365));
 			// set the parents' children relationship
 			person.addChildren(children);
 			spouse.addChildren(children);
@@ -131,17 +147,17 @@ public class Dataset {
 		/**
 		 * Fill the names, genders, and birthdays.
 		 */
-		Name name;
-		for (int j = 0; j < people.length; ++j) {
-			if (people[j].birthday == null) {
-				people[j].birthday = getABirthday();
-			}
-			if (people[j].name == null) {
-				name = gendernames.getAName();
-				people[j].name = name.getName();
-				people[j].gender = name.getGender();
-			}
-		}
+//		Name name;
+//		for (int j = 0; j < people.length; ++j) {
+//			if (people[j].birthday == null) {
+//				people[j].birthday = getABirthday();
+//			}
+//			if (people[j].name == null) {
+//				name = gendernames.getAName();
+//				people[j].name = name.getName();
+//				people[j].gender = name.getGender();
+//			}
+//		}
 
 		return people;
 	}
@@ -163,10 +179,10 @@ public class Dataset {
 	 * @param children
 	 * @return
 	 */
-	private LocalDate maxBirthdayOf(ArrayList<Person> children) {
+	private LocalDate oldestBirthdayOf(ArrayList<Person> children) {
 		LocalDate oldest = children.get(0).birthday;
 		for (Person child : children) {
-			if (child.birthday.isBefore(oldest))
+			if (child.birthday != null && child.birthday.isBefore(oldest))
 				oldest = child.birthday;
 		}
 		return oldest;
@@ -200,46 +216,137 @@ public class Dataset {
 		 */
 		// save children to return
 		ArrayList<Person> children = new ArrayList<Person>();
+		LocalDate oldest = null;
+		LocalDate youngest = null;
+		Period duration;
 		// max of tries to get the children
 		int maxTries = 5;
-		int time = 0;
+		int times = 0;
 		int childIndex;
-		while (time < maxTries && howMany > 0) {
+		boolean tooOld = false;
+		boolean tooYoung = false;
+		boolean tooClose = false;
+		Person potentialChild;
+		while (times < maxTries && howMany > 0) {
 			childIndex = random.nextInt(i);
-			if (hasParents.get(this.people[childIndex]) != null && hasParents.get(this.people[childIndex]) == true) {
+			// check if it's been claimed
+			potentialChild = this.people[childIndex];
+			if (hasParents.get(potentialChild) != null && hasParents.get(potentialChild) == true) {
 				// try to find another one and consume one try
-				++time;
+				++times;
 				continue;
-			} else {
-				// Yeah! Got a child without any parent! Don't consume tries.
-				howMany -= 1;
-				children.add(this.people[childIndex]);
+			}
+			// check if it has an age 
+			if(potentialChild.birthday == null) {
+				// do nothing
+			}else {
+				/** 
+				 * check if the age makes sense
+				 */
+				
+				// check if it's too old
+				if (youngest == null) {
+					// pass the check and set youngest
+					youngest = potentialChild.birthday;
+					oldest = potentialChild.birthday;
+					tooOld = false;
+				}else {
+					// check if it's within 15 years
+					if(potentialChild.birthday.isBefore(youngest.minusYears(15))) {
+						// failed, too old
+						tooOld = true;
+					}else {
+						tooOld = false;
+					}
+				}
+				
+				// check if it's too young
+				if (oldest == null) {
+					// pass the check and set youngest
+					oldest = potentialChild.birthday;
+					youngest = potentialChild.birthday;
+					tooYoung = false;
+				}else {
+					// check if it's within 15 years
+					if(potentialChild.birthday.isAfter(oldest.plusYears(15))) {
+						// failed, too old
+						tooYoung = true;
+					}else {
+						tooYoung = false;
+					}
+				}
+				
+				if(tooOld && tooYoung) {
+					++times;
+					continue;
+				}
+				
+				// check if the gaps between children make sense
+				for(Person child: children) {
+					if (child.birthday != null) {
+						duration = Period.between(child.birthday, potentialChild.birthday);
+						if (duration.getDays() < 365) {
+							tooClose = true;
+							break;
+						}
+					}
+				}
+				
+				if (tooClose) {
+					++times;
+					continue;
+				}
+			}
+			// Yeah! Got a good child! Don't consume tries.
+			howMany -= 1;
+			children.add(potentialChild);
+		}
+		
+		// got no children, return null
+		if (children.isEmpty()) {
+			return null;
+		}
+
+		/**
+		 * set their birthdays
+		 */
+		LocalDate prev;
+		// set the gap, the minimum is 1
+		int gap = Math.max((int) random.nextGaussian(1, 2), 1);
+
+		// get the oldest child
+		Person oldestChild = children.get(0);
+		for(Person child: children) {
+			if (child.birthday == null) continue;
+			if (oldestChild.birthday == null) {
+				oldestChild = child;
+			}else if (child.birthday.isBefore(oldestChild.birthday)) {
+				oldestChild = child;
+			}
+		}
+		
+		if (oldestChild.birthday == null) {
+			// generate all birthdays
+			prev = LocalDate.now().minusDays(random.nextLong(365));
+			for(Person child: children) {
+				child.birthday = prev.minusYears(gap);
+				prev = child.birthday;
+				// refresh gap
+				gap = Math.max((int) random.nextGaussian(1, 2), 1);
+			}
+		}else {
+			// generate some birthdays
+			prev = oldestChild.birthday.minusDays(random.nextLong(90));
+			for(Person child: children) {
+				if (child.birthday != null) {
+					child.birthday = prev.minusYears(gap);
+					prev = child.birthday;
+					// refresh gap
+					gap = Math.max((int) random.nextGaussian(1, 2), 1);
+				}
 			}
 		}
 
-		/**
-		 * set their birthdays
-		 */
-
-		/**
-		 * set their ages first
-		 */
-		// set the gap, the minimum is 1
-		int gap = Math.max((int) random.nextGaussian(2, 2), 1);
-		ArrayList<Integer> age = new ArrayList<Integer>();
-		// set the age of the first child
-		age.add((int) Math.max(1, random.nextGaussian(2, 2)));
-		for (int i1 = 1; i1 < children.size(); ++i1) {
-			age.add(age.get(i1 - 1) + gap);
-			gap = Math.max((int) random.nextGaussian(2, 2), 1);
-		}
-		/**
-		 * set their birthdays
-		 */
-		LocalDate today = LocalDate.now();
-		for (int j = 0; j < children.size(); ++j) {
-			children.get(j).birthday = today.minusYears(age.get(j)).minusDays(random.nextLong(365));
-		}
 		return children;
 	}
 
