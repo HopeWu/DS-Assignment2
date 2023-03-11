@@ -69,7 +69,7 @@ public class GenderNames {
 	 */
 	public Name getAFemaleName() {
 		int index = random.nextInt(size());
-		while (!genderNames.get(genderNames.keySet().toArray()[index]).equals("m")) {
+		while (!genderNames.get(genderNames.keySet().toArray()[index]).equals("f")) {
 			index = random.nextInt(size());
 		}
 		String name = (String) genderNames.keySet().toArray()[index];
