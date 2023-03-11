@@ -26,11 +26,11 @@ public class Dataset {
 		 */
 		Dataset dataset = new Dataset(100);
 		Person[] people = dataset.getData();
-//		for (int i = 0; i < people.length; ++i) {
-//			System.out.print(i + " ");
-//			System.out.println(people[i]);
-//			System.out.flush();
-//		}
+		for (int i = 0; i < people.length; ++i) {
+			System.out.print(i + " ");
+			System.out.println(people[i]);
+			System.out.flush();
+		}
 	}
 
 	public Dataset(int scale) {
