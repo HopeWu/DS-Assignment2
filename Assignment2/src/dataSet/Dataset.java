@@ -129,8 +129,8 @@ public class Dataset {
 
 			person.birthday = oldestBirthday.minusYears(Math.max((long) random.nextGaussian(23, 6), 18))
 					.minusDays(random.nextLong(365));
-			System.out.print(oldestBirthday + " ");
-			System.out.println(person.birthday);
+//			System.out.print(oldestBirthday + " ");
+//			System.out.println(person.birthday);
 			// set the spouse's birthday to N(partner's birthday, 2)
 			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2)))
 					.minusDays(random.nextLong(365));
