@@ -24,7 +24,7 @@ public class Dataset {
 		/**
 		 * For testing
 		 */
-		Dataset dataset = new Dataset(500);
+		Dataset dataset = new Dataset(1000);
 		Person[] people = dataset.getData();
 		for (int i = 0; i < people.length; ++i) {
 			System.out.print(i + " ");
@@ -144,19 +144,19 @@ public class Dataset {
 		}
 
 		/**
-		 * Fill the names, genders, and birthdays.
+		 * Fill the rest names, genders, and birthdays.
 		 */
-//		Name name;
-//		for (int j = 0; j < people.length; ++j) {
-//			if (people[j].birthday == null) {
-//				people[j].birthday = getABirthday();
-//			}
-//			if (people[j].name == null) {
-//				name = gendernames.getAName();
-//				people[j].name = name.getName();
-//				people[j].gender = name.getGender();
-//			}
-//		}
+		Name name;
+		for (int j = 0; j < people.length; ++j) {
+			if (people[j].birthday == null) {
+				people[j].birthday = getABirthday();
+			}
+			if (people[j].name == null) {
+				name = gendernames.getAName();
+				people[j].name = name.getName();
+				people[j].gender = name.getGender();
+			}
+		}
 
 		return people;
 	}
