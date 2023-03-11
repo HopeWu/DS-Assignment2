@@ -12,7 +12,7 @@ public class TestDrive {
 		// create Dataset object to generate test data
 		Dataset dataset = new Dataset();
 		// set the amount of data we are going to get
-		dataset.setPopulation(10000);
+		//dataset.setPopulation(10000);
 		// get the data, which is a family tree
 		Person[] people = dataset.getData();
 		
