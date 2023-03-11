@@ -31,7 +31,7 @@ public class GenderNames {
 		if (genderNames != null)
 			return;
 		genderNames = new HashMap<String, String>();
-		BufferedReader in;
+		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new FileReader("data/names_dataset.csv"));
 			String line;
@@ -45,6 +45,15 @@ public class GenderNames {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
