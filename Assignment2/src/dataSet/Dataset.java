@@ -182,7 +182,9 @@ public class Dataset {
 	private LocalDate oldestBirthdayOf(ArrayList<Person> children) {
 		LocalDate oldest = children.get(0).birthday;
 		for (Person child : children) {
-			if (child.birthday != null && child.birthday.isBefore(oldest))
+			if (child.birthday == null) continue;
+			if (oldest == null) oldest = child.birthday;
+			else if (child.birthday.isBefore(oldest))
 				oldest = child.birthday;
 		}
 		return oldest;
