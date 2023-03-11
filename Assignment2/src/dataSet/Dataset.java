@@ -45,7 +45,7 @@ public class Dataset {
 		this.relationRate = relationRate;
 	}
 
-	public void setPopulation(int scale) {
+	private void setPopulation(int scale) {
 		this.population = scale;
 	}
 
@@ -107,7 +107,7 @@ public class Dataset {
 			oldestBirthday = maxBirthdayOf(children);
 			// set the parent's birthday that is N(23, 6) years earlier than the oldest
 			// child. as least 17 years older
-			person.birthday = oldestBirthday.minusYears(Math.min((long) random.nextGaussian(23, 6), 18));
+			person.birthday = oldestBirthday.minusYears(Math.min((long) random.nextGaussian(23, 6), 18)).minusDays(random.nextLong(365));
 
 			// set the couples' name and gender
 			name1 = gendernames.getAMaleName();
@@ -117,7 +117,7 @@ public class Dataset {
 			spouse.name = name2.getName();
 			spouse.gender = name2.getGender();
 			// set the spouse's birthday to N(partner's birthday, 2)
-			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2)));
+			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2))).minusDays(random.nextLong(365));
 			// set the parents' children relationship
 			person.addChildren(children);
 			spouse.addChildren(children);
@@ -238,7 +238,7 @@ public class Dataset {
 		 */
 		LocalDate today = LocalDate.now();
 		for (int j = 0; j < children.size(); ++j) {
-			children.get(j).birthday = today.minusYears(age.get(j));
+			children.get(j).birthday = today.minusYears(age.get(j)).minusDays(random.nextLong(365));
 		}
 		return children;
 	}
@@ -277,6 +277,6 @@ public class Dataset {
 	 */
 	private LocalDate getABirthday() {
 		LocalDate today = LocalDate.now();
-		return today.plusYears(random.nextInt(120) + 1);
+		return today.minusYears(random.nextInt(120) + 1).minusDays(random.nextLong(365));
 	}
 }
