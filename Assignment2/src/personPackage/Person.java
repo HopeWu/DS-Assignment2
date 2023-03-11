@@ -54,7 +54,7 @@ public class Person {
 	@Override
 	public String toString() {
 		String spouseName = this.spouse != null ? this.spouse.name : null;
-		String firstChildBirthday = this.children != null ? this.children.get(0).birthday.toString() : null;
+		String firstChildBirthday = (this.children != null && this.children.get(0).birthday != null) ? this.children.get(0).birthday.toString() : null;
 		String parentBirthday = this.parents != null ? this.parents.get(0).birthday.toString() : null;
 		return "Person [name=" + name + ", spouse=" + spouseName + ", birthday=" + birthday + ", birthplace=" + birthplace
 				+ ", nationality=" + nationality + ", gender=" + gender + ", dna=" + dna
