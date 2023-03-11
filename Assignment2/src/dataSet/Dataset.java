@@ -57,7 +57,8 @@ public class Dataset {
 	private void setPopulation(int scale) {
 		this.population = scale;
 	}
-
+	
+	
 	/**
 	 * The returned data is a bunch of PersonNode, with their blood relationship
 	 * built in. They don't necessarily share one single ancestor. In other words,
@@ -68,6 +69,14 @@ public class Dataset {
 
 	public Person[] getData() {
 
+		this.generateData();
+		return this.people;
+	}
+
+	/**
+	 * generate the data, i.e., populate this.people
+	 */
+	public void generateData() {
 		/**
 		 * Create all the Person objects.
 		 */
@@ -156,9 +165,9 @@ public class Dataset {
 				people[j].gender = name.getGender();
 			}
 		}
-
-		return people;
 	}
+	
+	
 
 	/**
 	 * 
