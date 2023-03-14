@@ -1,5 +1,6 @@
 package binarySearchTree;
 
+import dataSet.DataScaleTooSmallException;
 import dataSet.Dataset;
 import node.Node;
 import personPackage.Person;
@@ -12,7 +13,13 @@ public class BinarySearchTree extends Tree {
 		/**
 		 * get testing dataset
 		 */
-		Dataset dataset = new Dataset(100);
+		Dataset dataset = null;
+		try {
+			dataset = new Dataset(6);
+		} catch (DataScaleTooSmallException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Person[] people = dataset.getData();
 
 		BinarySearchTree bst = new BinarySearchTree();
@@ -25,6 +32,7 @@ public class BinarySearchTree extends Tree {
 		System.out.println(people[2]);
 		person = bst.lookup(people[2].dna);
 		System.out.println(person);
+		System.out.println(bst.getHeight());
 	}
 
 	private BSTNode root = null;
@@ -106,7 +114,15 @@ public class BinarySearchTree extends Tree {
 	}
 
 	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this._getHeight(this.root);
+	}
+	
+	int maxHeight = 0;
+	
+	public int _getHeight(BSTNode root) {
+		// null node does add to the height
+		if (root == null) return 0;
+		// the height of this node is the higher child's height plus 1
+		return Math.max(_getHeight(root.left), _getHeight(root.right)) + 1;
 	}
 }
