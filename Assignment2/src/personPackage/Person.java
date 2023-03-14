@@ -11,10 +11,19 @@ public class Person {
 	public String birthplace;
 	public String nationality;
 	public String gender;
-	public String dna;
+	public DNA dna;
 	
 	ArrayList<Person> children;
 	ArrayList<Person> parents;
+	
+	public ArrayList<Person> getChildren() {
+		return children;
+	}
+	public ArrayList<Person> getParents() {
+		return parents;
+	}
+
+	
 	
 	public Person() {
 		super();
@@ -25,7 +34,7 @@ public class Person {
 		super();
 		this.birthplace = birthplace;
 		this.nationality = nationality;
-		this.dna = dna;
+		this.dna = new DNA(dna);
 	}
 	
 	/**
@@ -43,7 +52,6 @@ public class Person {
 		for (Person child: children) {
 			this.children.add(child);
 		}
-		
 	}
 
 	public void addParent(Person person) {

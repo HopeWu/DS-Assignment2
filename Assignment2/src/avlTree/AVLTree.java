@@ -1,11 +1,13 @@
 package avlTree;
 
+import dataSet.DNAGen;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import node.Node;
 import node.avlTreeNode;
 import personPackage.Person;
+import personPackage.DNA;
 import tree.Tree;
 
 public class AVLTree extends Tree{
@@ -190,6 +192,11 @@ public class AVLTree extends Tree{
         }
 	}
 
+	@Override
+	public Person lookup(DNA dna) {
+		// TODO Auto-generated method stub
+		return null;
+    
 	/**
 	 * Searches for a Person object in the AVL tree with the given DNA using a
 	 * recursive depth-first search. Returns the Person object with the given DNA,

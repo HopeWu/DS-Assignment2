@@ -2,6 +2,7 @@ package tree;
 
 import node.Node;
 import personPackage.Person;
+import personPackage.DNA;
 
 public abstract class Tree {
 	/**
@@ -22,7 +23,7 @@ public abstract class Tree {
 	public abstract void insertFamily(Person person);
 	
 	// lookup one person by gene
-	public abstract Person lookup(String gene);
+	public abstract Person lookup(DNA dna);
 	
 	// get the height of this tree with the height being the depth of the deepest leaf node
 	public abstract int getHeight();
