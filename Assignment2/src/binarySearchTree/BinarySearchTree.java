@@ -50,12 +50,23 @@ public class BinarySearchTree extends Tree {
 	}
 
 	public void insertPerson(Person person) {
+		this._insertPerson(root, person);
+	}
+	
+	public void _insertPerson(BSTNode root, Person person) {
 		if (this.root == null) {
+			// if current node is null, insert into it
 			root = new BSTNode(person);
 			return;
 		}
 		
-		root.insert(person);
+		if (person.dna.isGreaterThan(root.data.dna)) {
+			// search right child
+			this._insertPerson(root.right, person);
+		}else {
+			// search left child
+			this._insertPerson(root.left, person);
+		}
 	}
 
 	public void insert(Person[] persons) {
