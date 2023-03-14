@@ -4,41 +4,97 @@ import node.Node;
 import personPackage.Person;
 import tree.Tree;
 
-public class BTree extends Tree{
 
+public class BTree extends Tree {
+	BTreeHelper<String, Person> bTreeHelper;
+	
+	/**
+	 * Initializes a B-tree using the given order m (must be even and greater than 2)
+	 * @param m the order of the B-tree
+	 */
+	public BTree(int m) {
+		super();
+		this.bTreeHelper = new BTreeHelper<String, Person>(m);
+	}
+	
+    /**
+     * Builds an B-tree from an array of Person objects based on their DNAs.
+     * @param personData An array of Person objects to be inserted into the tree.
+     */
+	@Override
 	public Node buildTree(Person[] personData) {
-		// TODO Auto-generated method stub
-		return null;
+		for (Person person : personData) {
+			bTreeHelper.put(person.dna, person);
+		}
+		return bTreeHelper.getRoot();
 	}
-
+	
+	/**
+     * Gets the root of the B-tree.
+     */
+	@Override
 	public Node getRoot() {
-		// TODO Auto-generated method stub
-		return null;
+		return bTreeHelper.getRoot();
 	}
-
+	
+	/**
+     * Inserts a single Person object into the B-tree. 
+     * @param person The Person object to be inserted into the tree.
+     */
+	@Override
 	public void insertPerson(Person person) {
-		// TODO Auto-generated method stub
-		
+		bTreeHelper.put(person.dna, person);		
 	}
-
+	
+	/**
+     * Inserts an array of Person objects into the B-tree. 
+     * @param persons An array of Person objects to be inserted into the tree.
+     */
+	@Override
 	public void insert(Person[] persons) {
-		// TODO Auto-generated method stub
-		
+		for (Person person : persons) {
+			bTreeHelper.put(person.dna, person);
+		}			
+	}
+	
+	 /**
+     * Inserts a person and his/her family members(spouse, parents/parents-in-law and children) into the B-tree
+     * @param person The person who and whose family members to be inserted into the tree.
+     */
+	@Override
+	public void insertFamily(Person person) {		
+		bTreeHelper.put(person.dna, person);
+		if (person.spouse != null) {
+			bTreeHelper.put(person.spouse.dna, person.spouse);
+			person.spouse.parents.forEach(p -> bTreeHelper.put(p.dna, p));
+		}			
+		person.parents.forEach(p -> bTreeHelper.put(p.dna, p));
+		person.children.forEach(p -> bTreeHelper.put(p.dna, p));		
 	}
 
-	public void insertFamily(Person person) {
-		// TODO Auto-generated method stub
-		
-	}
 
+	/**
+	 * Searches for a person by the given gene 
+	 * @param gene The DNA of the target person.
+	 * @return The Person object with the given gene if it exists in the B-tree, otherwise null
+	 */
+	@Override
 	public Person lookup(String gene) {
-		// TODO Auto-generated method stub
-		return null;
+		return bTreeHelper.search(gene);
 	}
-
+	
+	/**
+     * Gets the height of the B-tree.
+     */
+	@Override
 	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return bTreeHelper.getHeight();
 	}
-
+	
+	/**
+	 * Returns a string representation of the B-tree, using indents to show different levels of the tree.
+	 */
+	public String toString() {
+		return bTreeHelper.toString();
+	}
 }
