@@ -21,4 +21,11 @@ public class DNA {
 	public boolean isEqualTo(DNA dna2) {
 		return this.gene.equalsIgnoreCase(dna2.gene);
 	}
+	
+	public static void main(String[] args) {
+		// unit test
+		DNA dna1 = new DNA("ABcD");
+		DNA dna2 = new DNA("ABcD");
+		System.out.println(dna1.isEqualTo(dna2));
+	}
 }
