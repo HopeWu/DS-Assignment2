@@ -15,7 +15,7 @@ public class BinarySearchTree extends Tree {
 		 */
 		Dataset dataset = null;
 		try {
-			dataset = new Dataset(6);
+			dataset = new Dataset(1000);
 		} catch (DataScaleTooSmallException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,16 +43,20 @@ public class BinarySearchTree extends Tree {
 	 * Build a tree from a family tree @personData, the root of the family tree
 	 */
 	public Node buildTree(Person[] people) {
-		for (int i = 0; i < people.length; ++i) {
-			this.insertPerson(people[i]);
-		}
+		insert(people);
 		return this.root;
 	}
 
+	/**
+	 * return the root of the tree
+	 */
 	public Node getRoot() {
-		return root;
+		return this.root;
 	}
 
+	/**
+	 * insert only one person
+	 */
 	public void insertPerson(Person person) {
 		if (this.root == null) {
 			this.root = new BSTNode(person);
@@ -61,6 +65,11 @@ public class BinarySearchTree extends Tree {
 		isHeightModified = true;
 	}
 
+	/**
+	 * real recursive insert
+	 * @param root, under which root to insert
+	 * @param person, which person to insert
+	 */
 	private void _insertPerson(BSTNode root, Person person) {
 
 		if (person.dna.isGreaterThan(root.data.dna)) {
@@ -84,21 +93,49 @@ public class BinarySearchTree extends Tree {
 		}
 	}
 
+	/**
+	 * insert a bunch of people
+	 */
 	public void insert(Person[] persons) {
-		// unimplemented
-		isHeightModified = true;
+		for (int i = 0; i < persons.length; ++i) {
+			this.insertPerson(persons[i]);
+		}
 	}
 
+	/**
+	 * insert the whole family, a family is defined by three generations, parent
+	 * generation, current generation, children generation
+	 */
 	public void insertFamily(Person person) {
-		// unimplemented
-		isHeightModified = true;
+		if (person == null)
+			return;
+		insertPerson(person);
+		// insert their family if there is any in the data set
+		if (person.getParents() != null)
+			for (Person parent : person.getParents()) {
+				insertPerson(parent);
+			}
+		// insert their children if there is any in the data set
+		if (person.getChildren() != null)
+			for (Person child : person.getChildren()) {
+				insertPerson(child);
+			}
 	}
 
+	/**
+	 * lookup a person by dna
+	 */
 	public Person lookup(DNA dna) {
 		return _lookup(root, dna);
 	}
 
-	public Person _lookup(BSTNode root,DNA dna) {
+	/**
+	 * real recursive lookup
+	 * @param root, search this root
+	 * @param dna, search by this dna
+	 * @return, return the Person if found
+	 */
+	public Person _lookup(BSTNode root, DNA dna) {
 		if (root == null)
 			// didn't find it
 			return null;
@@ -109,7 +146,7 @@ public class BinarySearchTree extends Tree {
 		if (dna.isGreaterThan(root.data.dna)) {
 			// search its right child
 			return this._lookup(root.right, dna);
-		}else {
+		} else {
 			// search its left child
 			return this._lookup(root.left, dna);
 		}
@@ -124,10 +161,16 @@ public class BinarySearchTree extends Tree {
 			this.height = this._getHeight(this.root);
 		return this.height;
 	}
-	
+
+	/**
+	 * real recursive getHeight function
+	 * @param root, the height of this root
+	 * @return, the height of this root
+	 */
 	public int _getHeight(BSTNode root) {
 		// null node does add to the height
-		if (root == null) return 0;
+		if (root == null)
+			return 0;
 		// the height of this node is the higher child's height plus 1
 		return Math.max(_getHeight(root.left), _getHeight(root.right)) + 1;
 	}
