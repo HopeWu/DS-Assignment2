@@ -15,13 +15,13 @@ public class BTreeTest {
 		testBtree();
 	}
 	public static void testBtree() {
-		int size = 100000;
+		int size = 1000000;
 		Person[] people = getDate(size);
 		if (people == null) {
 			return;
 		}
 		
-		System.out.println("Data Size, Order, Build Tree, Search");
+		System.out.println("Data Size, Order, Height, Build Tree, Search");
 		
 		for (int k = 4; k <= 100; k += 2) {
 			Tree tree = new BTree(k);
@@ -41,7 +41,7 @@ public class BTreeTest {
 			long elapsedTime2 = end2 - start2;
 //			System.out.println(target);
 			
-			System.out.println(size + ", " + k + ", " + elapsedTime1 + ", " + elapsedTime2);
+			System.out.println(size + ", " + k + ", " + tree.getHeight() + ", " + elapsedTime1 + ", " + elapsedTime2);
 			
 //			int nullCount = 0;
 //			for (int i = 0; i < people.length; i++) {
@@ -63,7 +63,7 @@ public class BTreeTest {
 	 * Gets data from the previously generated file with the data size as the suffix
 	 */
 	private static Person[] getDate(int size) {
-		String path = String.format("Assignment2/data/data_%d.txt", size);
+		String path = String.format("data/data_%d.txt", size);
 	    // read data from previously generated data file
 		try {
 			FileInputStream fi = new FileInputStream(path);

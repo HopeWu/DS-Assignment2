@@ -1,6 +1,8 @@
 package bTree;
 
+import dataSet.DNAGen;
 import node.Node;
+import personPackage.DNA;
 import personPackage.Person;
 import tree.Tree;
 
@@ -24,7 +26,7 @@ public class BTree extends Tree {
 	@Override
 	public Node buildTree(Person[] personData) {
 		for (Person person : personData) {
-			bTreeHelper.put(person.dna, person);
+			bTreeHelper.put(person.dna.get(), person);
 		}
 		return bTreeHelper.getRoot();
 	}
@@ -43,7 +45,7 @@ public class BTree extends Tree {
      */
 	@Override
 	public void insertPerson(Person person) {
-		bTreeHelper.put(person.dna, person);		
+		bTreeHelper.put(person.dna.get(), person);		
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class BTree extends Tree {
 	@Override
 	public void insert(Person[] persons) {
 		for (Person person : persons) {
-			bTreeHelper.put(person.dna, person);
+			bTreeHelper.put(person.dna.get(), person);
 		}			
 	}
 	
@@ -63,15 +65,14 @@ public class BTree extends Tree {
      */
 	@Override
 	public void insertFamily(Person person) {		
-		bTreeHelper.put(person.dna, person);
+		bTreeHelper.put(person.dna.get(), person);
 		if (person.spouse != null) {
-			bTreeHelper.put(person.spouse.dna, person.spouse);
-			person.spouse.parents.forEach(p -> bTreeHelper.put(p.dna, p));
+			bTreeHelper.put(person.spouse.dna.get(), person.spouse);
+			person.spouse.getParents().forEach(p -> bTreeHelper.put(p.dna.get(), p));
 		}			
-		person.parents.forEach(p -> bTreeHelper.put(p.dna, p));
-		person.children.forEach(p -> bTreeHelper.put(p.dna, p));		
+		person.getParents().forEach(p -> bTreeHelper.put(p.dna.get(), p));
+		person.getChildren().forEach(p -> bTreeHelper.put(p.dna.get(), p));		
 	}
-
 
 	/**
 	 * Searches for a person by the given gene 
@@ -79,8 +80,8 @@ public class BTree extends Tree {
 	 * @return The Person object with the given gene if it exists in the B-tree, otherwise null
 	 */
 	@Override
-	public Person lookup(String gene) {
-		return bTreeHelper.search(gene);
+	public Person lookup(DNA dna) {
+		return bTreeHelper.search(dna.get());
 	}
 	
 	/**

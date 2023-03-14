@@ -12,18 +12,26 @@ import personPackage.Person;
  */
 public class DataGenerator {
 	public static void main(String[] args) {
-		int size = 10000;
-		long start0 = System.currentTimeMillis();
-		Dataset dataset = new Dataset(size);
-		Person[] people = dataset.getData();
-		long end0 = System.currentTimeMillis();
-		long elapsedTime0 = end0 - start0;
-		System.out.println(String.format("Generating data of size %d takes %d milliseconds.", size, elapsedTime0));
-		DataGenerator.saveData(people, people.length);
+		int size = 1000000;
+		generateData(size);
+	}
+
+	private static void generateData(int size) {		
+		long start0 = System.currentTimeMillis();		
+		try {
+			 Dataset dataset = new Dataset(size);
+			Person[] people = dataset.getData();
+			long end0 = System.currentTimeMillis();
+			long elapsedTime0 = end0 - start0;
+			System.out.println(String.format("Generating data of size %d takes %d milliseconds.", size, elapsedTime0));
+			DataGenerator.saveData(people, people.length);
+		} catch (DataScaleTooSmallException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public static void saveData(Person[] people, int size) {		
-		String path = String.format("Assignment2/data/data_%d.txt", size);
+	private static void saveData(Person[] people, int size) {		
+		String path = String.format("data/data_%d.txt", size);
 		try {
 			FileOutputStream fo = new FileOutputStream(path);
 		    ObjectOutputStream oo = new ObjectOutputStream(fo);
