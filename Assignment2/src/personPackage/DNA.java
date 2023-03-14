@@ -10,4 +10,11 @@ public class DNA {
 	public String get() {
 		return gene;
 	}
+	
+	public boolean isGreaterThan(DNA dna2) {
+		if (this.gene.compareTo(dna2.gene) > 0) 
+			return true;
+		else
+			return false;
+	}
 }
