@@ -22,8 +22,8 @@ public class BinarySearchTree extends Tree {
 		 * try some lookups to verify
 		 */
 		Person person;
-		person = bst.lookup(people[2].dna);
 		System.out.println(people[2]);
+		person = bst.lookup(people[2].dna);
 		System.out.println(person);
 	}
 
@@ -44,22 +44,32 @@ public class BinarySearchTree extends Tree {
 	}
 
 	public void insertPerson(Person person) {
-		this._insertPerson(root, person);
+		if (this.root == null) {
+			this.root = new BSTNode(person);
+		}
+		this._insertPerson(this.root, person);
 	}
 
 	public void _insertPerson(BSTNode root, Person person) {
-		if (this.root == null) {
-			// if current node is null, insert into it
-			root = new BSTNode(person);
-			return;
-		}
 
 		if (person.dna.isGreaterThan(root.data.dna)) {
 			// search right child
-			this._insertPerson(root.right, person);
+			if (root.right != null)
+				// go further into the right and look for a insertion spot
+				this._insertPerson(root.right, person);
+			else {
+				// insert here
+				root.right = new BSTNode(person);
+			}
 		} else {
 			// search left child
-			this._insertPerson(root.left, person);
+			if (root.left != null)
+				// go further into the left and look for a insertion spot
+				this._insertPerson(root.left, person);
+			else {
+				// insert here
+				root.left = new BSTNode(person);
+			}
 		}
 	}
 
@@ -86,7 +96,7 @@ public class BinarySearchTree extends Tree {
 			// found it!
 			return root.data;
 		}
-		if (root.data.dna.isGreaterThan(dna)) {
+		if (dna.isGreaterThan(root.data.dna)) {
 			// search its right child
 			return this._lookup(root.right, dna);
 		}else {
