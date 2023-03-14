@@ -36,6 +36,8 @@ public class BinarySearchTree extends Tree {
 	}
 
 	private BSTNode root = null;
+	int height = 0;
+	boolean isHeightModified = false;
 
 	/**
 	 * Build a tree from a family tree @personData, the root of the family tree
@@ -56,9 +58,10 @@ public class BinarySearchTree extends Tree {
 			this.root = new BSTNode(person);
 		}
 		this._insertPerson(this.root, person);
+		isHeightModified = true;
 	}
 
-	public void _insertPerson(BSTNode root, Person person) {
+	private void _insertPerson(BSTNode root, Person person) {
 
 		if (person.dna.isGreaterThan(root.data.dna)) {
 			// search right child
@@ -82,17 +85,16 @@ public class BinarySearchTree extends Tree {
 	}
 
 	public void insert(Person[] persons) {
-		// TODO Auto-generated method stub
-
+		// unimplemented
+		isHeightModified = true;
 	}
 
 	public void insertFamily(Person person) {
-		// TODO Auto-generated method stub
-
+		// unimplemented
+		isHeightModified = true;
 	}
 
 	public Person lookup(DNA dna) {
-
 		return _lookup(root, dna);
 	}
 
@@ -113,11 +115,15 @@ public class BinarySearchTree extends Tree {
 		}
 	}
 
+	/**
+	 * get height with cache
+	 */
 	public int getHeight() {
-		return this._getHeight(this.root);
+		// cache the height
+		if (isHeightModified)
+			this.height = this._getHeight(this.root);
+		return this.height;
 	}
-	
-	int maxHeight = 0;
 	
 	public int _getHeight(BSTNode root) {
 		// null node does add to the height
