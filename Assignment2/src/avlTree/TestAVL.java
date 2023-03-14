@@ -1,11 +1,18 @@
 package avlTree;
 
+import dataSet.DataScaleTooSmallException;
 import dataSet.Dataset;
 import personPackage.Person;
 
 public class TestAVL {
 	public static void main(String[] args) {
-		Dataset dataset = new Dataset(100);
+		Dataset dataset = null;
+		try {
+			dataset = new Dataset(100);
+		} catch (DataScaleTooSmallException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Person[] people = dataset.getData();
 		for (int i = 0; i < people.length; ++i) {
 			System.out.print(i + " ");
@@ -14,7 +21,13 @@ public class TestAVL {
 		 // Create a new AVLTree object
 	    AVLTree tree = new AVLTree();
 	    
-	    Dataset dataset2 = new Dataset(100);
+	    Dataset dataset2 = null;
+		try {
+			dataset2 = new Dataset(100);
+		} catch (DataScaleTooSmallException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    Person[] people2 = dataset2.getData();
 	    
 //	 // Build an AVL tree from the Person objects

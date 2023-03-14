@@ -63,11 +63,11 @@ public class AVLTree extends Tree{
         }
 
         // If the person's DNA is less than the current node's DNA, insert it into the left subtree
-        if (person.dna.compareTo(node.getPerson().dna) < 0) {
+        if (person.dna.get().compareTo(node.getPerson().dna.get()) < 0) {
             node.setLeftChild(insert(node.getLeftChild(), person));
         }
         // Otherwise, insert it into the right subtree
-        else if (person.dna.compareTo(node.getPerson().dna) > 0){
+        else if (person.dna.get().compareTo(node.getPerson().dna.get()) > 0){
             node.setRightChild(insert(node.getRightChild(), person));
         }
         else {
@@ -81,23 +81,23 @@ public class AVLTree extends Tree{
         int balance = getBalance(node);
 
         // Perform a right rotation if the left subtree is taller than the right subtree and the new person is inserted into the left subtree's left subtree
-        if (balance > 1 && person.dna.compareTo(node.getLeftChild().getPerson().dna) < 0) {
+        if (balance > 1 && person.dna.get().compareTo(node.getLeftChild().getPerson().dna.get()) < 0) {
             return rightRotate(node);
         }
 
         // Perform a left rotation if the right subtree is taller than the left subtree and the new person is inserted into the right subtree's right subtree
-        if (balance < -1 && person.dna.compareTo(node.getRightChild().getPerson().dna) > 0) {
+        if (balance < -1 && person.dna.get().compareTo(node.getRightChild().getPerson().dna.get()) > 0) {
             return leftRotate(node);
         }
 
         // Perform a left-right double rotation if the left subtree is taller than the right subtree and the new person is inserted into the left subtree's right subtree
-        if (balance > 1 && person.dna.compareTo(node.getLeftChild().getPerson().dna) > 0) {
+        if (balance > 1 && person.dna.get().compareTo(node.getLeftChild().getPerson().dna.get()) > 0) {
             node.setLeftChild(leftRotate(node.getLeftChild()));
             return rightRotate(node);
         }
 
         // Perform a right-left double rotation if the right subtree is taller than the left subtree and the new person is inserted into the right subtree's left subtree
-        if (balance < -1 && person.dna.compareTo(node.getRightChild().getPerson().dna) < 0) {
+        if (balance < -1 && person.dna.get().compareTo(node.getRightChild().getPerson().dna.get()) < 0) {
             node.setRightChild(rightRotate(node.getRightChild()));
             return leftRotate(node);
         }
@@ -120,7 +120,7 @@ public class AVLTree extends Tree{
             return node;
         }
 
-        int cmp = gene.compareTo(node.getPerson().dna);
+        int cmp = gene.compareTo(node.getPerson().dna.get());
         if (cmp < 0) {
             return search(node.getLeftChild(), gene);
         } else if (cmp > 0) {
@@ -192,11 +192,6 @@ public class AVLTree extends Tree{
         }
 	}
 
-	@Override
-	public Person lookup(DNA dna) {
-		// TODO Auto-generated method stub
-		return null;
-    
 	/**
 	 * Searches for a Person object in the AVL tree with the given DNA using a
 	 * recursive depth-first search. Returns the Person object with the given DNA,
@@ -205,9 +200,9 @@ public class AVLTree extends Tree{
 	 * @return The Person object with the given name, or null if no such person
 	 * exists in the tree.
 	 */
-	public Person lookup(String gene) {
+	public Person lookup(DNA dna) {
 		// TODO Auto-generated method stub
-		avlTreeNode node = search(root, gene);
+		avlTreeNode node = search(root, dna.get());
 		return (node == null) ? null : node.getPerson();
 	}
 
