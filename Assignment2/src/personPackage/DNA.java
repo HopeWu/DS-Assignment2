@@ -12,9 +12,13 @@ public class DNA {
 	}
 	
 	public boolean isGreaterThan(DNA dna2) {
-		if (this.gene.compareTo(dna2.gene) > 0) 
+		if (this.gene.compareToIgnoreCase(dna2.gene) > 0) 
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean isEqualTo(DNA dna2) {
+		return this.gene.equalsIgnoreCase(dna2.gene);
 	}
 }
