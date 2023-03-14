@@ -4,19 +4,11 @@ import node.Node;
 import personPackage.Person;
 
 public class BSTNode extends Node{
-	private BSTNode left;
-	private BSTNode right;
-	private Person data;
+	public BSTNode left;
+	public BSTNode right;
+	public Person data;
 
 	public BSTNode(Person person) {
-		// TODO Auto-generated constructor stub
+		this.data = person;
 	}
-
-	public void insert(Person person) {
-		// decide which child to insert into
-//		if (person.dna < data.dna) {
-//			
-//		}
-	}
-
 }
