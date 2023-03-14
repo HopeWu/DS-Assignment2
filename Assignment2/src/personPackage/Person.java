@@ -11,7 +11,7 @@ public class Person {
 	public String birthplace;
 	public String nationality;
 	public String gender;
-	public String dna;
+	public DNA dna;
 	
 	ArrayList<Person> children;
 	ArrayList<Person> parents;
@@ -25,7 +25,7 @@ public class Person {
 		super();
 		this.birthplace = birthplace;
 		this.nationality = nationality;
-		this.dna = dna;
+		this.dna = new DNA(dna);
 	}
 	
 	/**

@@ -366,7 +366,7 @@ public class Dataset {
 	 * @return
 	 */
 	private String getADNA() {
-		return DNA.get();
+		return DNAGen.get();
 	}
 
 	/**

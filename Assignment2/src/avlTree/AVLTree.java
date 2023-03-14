@@ -1,7 +1,9 @@
 package avlTree;
 
+import dataSet.DNAGen;
 import node.Node;
 import personPackage.Person;
+import personPackage.DNA;
 import tree.Tree;
 
 public class AVLTree extends Tree{
@@ -31,14 +33,15 @@ public class AVLTree extends Tree{
 		
 	}
 
-	public Person lookup(String gene) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public int getHeight() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Person lookup(DNA dna) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
