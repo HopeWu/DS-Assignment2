@@ -16,6 +16,15 @@ public class Person {
 	ArrayList<Person> children;
 	ArrayList<Person> parents;
 	
+	public ArrayList<Person> getChildren() {
+		return children;
+	}
+	public ArrayList<Person> getParents() {
+		return parents;
+	}
+
+	
+	
 	public Person() {
 		super();
 	}
@@ -43,7 +52,6 @@ public class Person {
 		for (Person child: children) {
 			this.children.add(child);
 		}
-		
 	}
 
 	public void addParent(Person person) {
