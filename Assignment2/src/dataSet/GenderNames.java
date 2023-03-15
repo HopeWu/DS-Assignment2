@@ -33,7 +33,9 @@ public class GenderNames {
 		genderNames = new HashMap<String, String>();
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new FileReader("data/names_dataset.csv"));
+			String dir = System.getProperty("user.dir");
+			in = new BufferedReader(new FileReader("Assignment2/data/names_dataset.csv"));
+			
 			String line;
 			String[] row;
 			while ((line = in.readLine()) != null) {

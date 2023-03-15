@@ -2,14 +2,14 @@ package dataSet;
 
 import java.util.Random;
 
-public class DNAGen {
+public class DNA {
 	private static final Character[] ACGT = {'A','C','G','T'};
 	private static final int length = 22;
 
 	/**
 	 * Do not allow creating instances
 	 */
-	private DNAGen() {
+	private DNA() {
 	}
 
 	/**
