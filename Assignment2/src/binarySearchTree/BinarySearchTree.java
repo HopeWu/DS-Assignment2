@@ -17,7 +17,6 @@ public class BinarySearchTree extends Tree {
 		try {
 			dataset = new Dataset(1000);
 		} catch (DataScaleTooSmallException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Person[] people = dataset.getData();
@@ -40,7 +39,8 @@ public class BinarySearchTree extends Tree {
 	boolean isHeightModified = false;
 
 	/**
-	 * Build a tree from a family tree @personData, the root of the family tree
+	 * Build a tree from a family tree @personData, the root of the family tree.
+	 * nlogn time
 	 */
 	public Node buildTree(Person[] people) {
 		insert(people);
