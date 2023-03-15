@@ -2,6 +2,7 @@ package redBlackTree;
 
 import node.Node;
 import personPackage.Person;
+import personPackage.DNA;
 import tree.Tree;
 
 public class RedBlackTree extends Tree{
@@ -39,6 +40,12 @@ public class RedBlackTree extends Tree{
 	public int getHeight() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Person lookup(DNA dna) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
