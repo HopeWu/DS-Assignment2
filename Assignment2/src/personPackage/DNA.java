@@ -1,9 +1,6 @@
 package personPackage;
 
-import java.io.Serializable;
-
-public class DNA implements Serializable {
-	private static final long serialVersionUID = -5350028782620209014L;
+public class DNA {
 	private String gene;
 	
 	public DNA(String gene) {
