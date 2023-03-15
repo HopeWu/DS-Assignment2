@@ -23,13 +23,7 @@ public class Dataset {
 		/**
 		 * For testing
 		 */
-		Dataset dataset = null;
-		try {
-			dataset = new Dataset(1000);
-		} catch (DataScaleTooSmallException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Dataset dataset = new Dataset(1000);
 		Person[] people = dataset.getData();
 		for (int i = 0; i < people.length; ++i) {
 			System.out.print(i + " ");
@@ -37,9 +31,8 @@ public class Dataset {
 		}
 	}
 
-	public Dataset(int scale) throws DataScaleTooSmallException {
+	public Dataset(int scale) {
 		super();
-		if (scale < 6 ) throw new DataScaleTooSmallException("Error! Dataset is too small.");
 		this.population = scale;
 		this.relationRate = 1;
 		people = new Person[population];
@@ -373,7 +366,7 @@ public class Dataset {
 	 * @return
 	 */
 	private String getADNA() {
-		return DNAGen.get();
+		return DNA.get();
 	}
 
 	/**
