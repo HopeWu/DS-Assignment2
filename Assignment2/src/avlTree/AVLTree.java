@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import node.Node;
-import node.avlTreeNode;
 import personPackage.Person;
 import personPackage.DNA;
 import tree.Tree;
@@ -153,11 +152,8 @@ public class AVLTree extends Tree{
      */
 	public Node buildTree(Person[] personData) {
 		// TODO Auto-generated method stub
-		AVLTree tree = new AVLTree();
-		for (Person person : personData) {
-	        tree.insertPerson(person);
-	    }
-        return tree.getRoot();
+		insert(personData);
+        return this.getRoot();
 	}
 
 	/**
