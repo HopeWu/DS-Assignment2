@@ -8,7 +8,8 @@ import tree.Tree;
 public class RedBlackTree extends Tree{
 	
 	public RedBlackNode buildTree(Person[] personData) {
-		return null;
+		insert(personData);
+		return root;
 	}
 
 	public RedBlackNode getRoot() {
