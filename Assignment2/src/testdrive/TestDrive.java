@@ -14,9 +14,9 @@ import tree.Tree;
 
 public class TestDrive {
 	public static void main(String[] args) {
-		checkTreeCorrectness();
+//		checkTreeCorrectness();
 //		testOrder(); // just for B-tree
-//		experimentAll();
+		experimentAll();
 	}
 	
 	/**
@@ -101,7 +101,8 @@ public class TestDrive {
 	}
 	
 	/**
-	 * Gets data from the previously generated file with the data size as the suffix
+	 * Reads data from the previously generated file with the given size
+	 * @param size the size of data that is needed (no more than 1000000)
 	 */
 	private static Person[] readData(int size) {
 		String path = "data/data_1000000.txt";
