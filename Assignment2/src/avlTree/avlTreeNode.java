@@ -1,7 +1,8 @@
-package node;
+package avlTree;
 
 import java.util.Objects;
 
+import node.Node;
 import personPackage.Person;
 
 /**

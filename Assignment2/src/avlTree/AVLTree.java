@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import node.Node;
-import node.avlTreeNode;
 import personPackage.Person;
 import personPackage.DNA;
 import tree.Tree;

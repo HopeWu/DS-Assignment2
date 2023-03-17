@@ -14,23 +14,15 @@ import tree.Tree;
 
 public class TestDrive {
 	public static void main(String[] args) {
-//		checkTreeCorrectness();
+		checkTreeCorrectness();
 //		testOrder(); // just for B-tree
-		experimentAll();
+//		experimentAll();
 	}
 	
 	/**
 	 * Experiments with all type of trees
 	 */
-	private static void experimentAll() {
-//		StringBuilder sb = new StringBuilder();
-//		sb.append("Type, Data Size, Height, Build Tree (ms), Memory (bytes), ");
-//		for (int i = 10000; i <= 100000; i += 10000) {
-//			sb.append("Search ").append(i).append(", ");
-//		}
-//		sb.append("Insert 10000");
-//		System.out.println(sb.toString());
-		
+	private static void experimentAll() {		
 		System.out.println("Type, Data Size, Height, Build Tree (ms), Memory (bytes), Search 10000, Insert 10000");
 		for (int size = 100000; size <= 1000000; size += 100000) {
 			Person[] people = readData(size);
@@ -91,8 +83,7 @@ public class TestDrive {
 		long elapsedTime2 = (endTime2 - startTime2) / ITERATIONS;
 		sb.append(elapsedTime2).append(", ");
 		
-		// insert 1000 new data into the tree
-			
+		// insert 10000 new data into the tree			
 		try {
 			Dataset dataset = new Dataset(10000);
 			Person[] newPeople = dataset.getData();	
@@ -105,7 +96,6 @@ public class TestDrive {
 			e.printStackTrace();
 		}
 		
-//		sb.delete(sb.length() - 2, sb.length());
 		System.out.println(sb.toString());
 //		System.out.println(type + ", " + size + ", " + tree.getHeight() + ", " + elapsedTime1 + ", " + mem + ", " + elapsedTime2 + ", " + elapsedTime3);
 	}

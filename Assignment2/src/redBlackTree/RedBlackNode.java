@@ -1,5 +1,6 @@
-package node;
+package redBlackTree;
 
+import node.Node;
 import personPackage.Person;
 
 public class RedBlackNode extends Node {

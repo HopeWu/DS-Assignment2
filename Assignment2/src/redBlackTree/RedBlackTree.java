@@ -1,6 +1,5 @@
 package redBlackTree;
 
-import node.RedBlackNode;
 import personPackage.Person;
 import personPackage.DNA;
 import tree.Tree;
