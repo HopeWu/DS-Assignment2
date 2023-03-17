@@ -39,8 +39,12 @@ public class BinarySearchTree extends Tree {
 	boolean isHeightModified = false;
 
 	/**
+<<<<<<< HEAD
 	 * Build a tree from a family tree @personData, the root of the family tree.
 	 * nlogn time
+=======
+	 * Build a tree from a family tree @personData, the root of the family tree
+>>>>>>> branch 'main' of https://github.com/HopeWu/DS-Assignment2.git
 	 */
 	public Node buildTree(Person[] people) {
 		insert(people);

@@ -153,8 +153,11 @@ public class AVLTree extends Tree{
      */
 	public Node buildTree(Person[] personData) {
 		// TODO Auto-generated method stub
-		insert(personData);
-        return this.getRoot();
+
+		for (Person person : personData) {
+	        insertPerson(person);
+	    }
+        return root;
 	}
 
 	/**
