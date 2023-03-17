@@ -1,1 +1,0 @@
-Assignment2/data/data_1000000.zip filter=lfs diff=lfs merge=lfs -text
