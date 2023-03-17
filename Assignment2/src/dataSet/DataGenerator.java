@@ -12,14 +12,18 @@ import personPackage.Person;
  */
 public class DataGenerator {
 	public static void main(String[] args) {
-		int size = 1000000;
+		int size = 100000;
 		generateData(size);
 	}
 
+	/**
+	 * Generates data of specified size
+	 * @param size the size of the data to be generated
+	 */
 	private static void generateData(int size) {		
 		long start0 = System.currentTimeMillis();		
 		try {
-			 Dataset dataset = new Dataset(size);
+			Dataset dataset = new Dataset(size);
 			Person[] people = dataset.getData();
 			long end0 = System.currentTimeMillis();
 			long elapsedTime0 = end0 - start0;
@@ -30,6 +34,11 @@ public class DataGenerator {
 		}
 	}
 	
+	/**
+	 * Saves data to files
+	 * @param people an array of Person Objects to be saved
+	 * @param size the length of the array
+	 */
 	private static void saveData(Person[] people, int size) {		
 		String path = String.format("data/data_%d.txt", size);
 		try {

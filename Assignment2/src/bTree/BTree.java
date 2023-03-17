@@ -1,6 +1,6 @@
 package bTree;
 
-import dataSet.DNAGen;
+
 import node.Node;
 import personPackage.DNA;
 import personPackage.Person;

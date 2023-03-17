@@ -69,7 +69,7 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 	/**
 	 * Searches the B-tree with the given key.
 	 *
-	 * @param key the key
+	 * @param key the key to be searched for
 	 * @return the value associated with the given key if the key is in the B-tree, 
 	 *         otherwise null
 	 * @throws IllegalArgumentException if the key is null
@@ -80,6 +80,14 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		return search(root, key, height);
 	}
 
+	/**
+	 * Searches the subtree with the given key. This is a helper function to do recursive search
+	 * @param node the root of the subtree
+	 * @param key the key to be searched for
+	 * @param height the height of the subtree
+	 * @return the value associated with the given key if the key is in the B-tree, 
+	 *         otherwise null
+	 */
 	@SuppressWarnings("unchecked")
 	private Value search(BTreeNode node, Key key, int height) {
 		Entry[] children = node.getChildren();
@@ -87,7 +95,7 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		// external node
 		if (height == 0) {
 			for (int j = 0; j < node.getChildNum(); j++) {
-				if (key.compareTo((Key) children[j].getKey()) == 0) // eq(key, children[j].getKey())
+				if (key.compareTo((Key) children[j].getKey()) == 0) //
 					return (Value) children[j].getVal();
 			}
 		}
@@ -95,7 +103,7 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		// internal node
 		else {
 			for (int j = 0; j < node.getChildNum(); j++) {
-				if (j + 1 == node.getChildNum() || key.compareTo((Key) children[j + 1].getKey()) < 0) // key, children[j + 1].getKey()
+				if (j + 1 == node.getChildNum() || key.compareTo((Key) children[j + 1].getKey()) < 0) 
 					return search(children[j].getNext(), key, height - 1);
 			}
 		}
@@ -126,6 +134,14 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		height++;
 	}
 
+	/**
+	 * Inserts the key-value pair into the subtree
+	 * @param node the root of the subtree
+	 * @param key the key of the new entry to be inserted
+	 * @param val the value of the new entry to be inserted
+	 * @param height the height of the subtree
+	 * @return 
+	 */
 	@SuppressWarnings("unchecked")
 	private BTreeNode insert(BTreeNode node, Key key, Value val, int height) {
 		int j;
@@ -137,18 +153,16 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 				if (key.compareTo((Key) node.getChildren()[j].getKey()) < 0)
 					break;
 			}
-		}
-
-		// internal node
-		else {
+		} else { // internal node			
 			for (j = 0; j < node.getChildNum(); j++) {
 				if ((j + 1 == node.getChildNum()) || key.compareTo((Key) node.getChildren()[j + 1].getKey()) < 0) {
-					BTreeNode u = insert(node.getChildren()[j++].getNext(), key, val, height - 1);
-					if (u == null)
+					BTreeNode nextNode = insert(node.getChildren()[j++].getNext(), key, val, height - 1);
+					if (nextNode == null) {
 						return null;
-					entry.setKey(u.getChildren()[0].getKey());
+					}						
+					entry.setKey(nextNode.getChildren()[0].getKey());
 					entry.setVal(null);
-					entry.setNext(u);
+					entry.setNext(nextNode);
 					break;
 				}
 			}
@@ -159,22 +173,24 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		}
 		node.getChildren()[j] = entry;
 		node.setChildNum(node.getChildNum() + 1);
-		if (node.getChildNum() < m)
+		if (node.getChildNum() < m) {
 			return null;
-		else
+		} else {
 			return split(node);
+		}			
 	}
 
 	/**
 	 * Splits node in half
-	 * @param node the node whose children
+	 * @param node the node to be split
 	 * @return the new node which contains the second half children of the previous node after splitting
 	 */
 	private BTreeNode split(BTreeNode node) {
 		BTreeNode newNode = new BTreeNode(m / 2, m);
 		node.setChildNum(m / 2);
-		for (int j = 0; j < m / 2; j++)
+		for (int j = 0; j < m / 2; j++) {
 			newNode.getChildren()[j] = node.getChildren()[m / 2 + j];
+		}			
 		return newNode;
 	}
 
@@ -185,6 +201,13 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 		return toString(root, height, "") + "\n";
 	}
 
+	/**
+	 * calls recursively and returns a string representation of the subtree, using indents to show different levels of the tree.
+	 * @param node the root of the subtree
+	 * @param height the height of the subtree
+	 * @param indent used to represent the level of the node in the tree
+	 * @return
+	 */
 	private String toString(BTreeNode node, int height, String indent) {
 		StringBuilder s = new StringBuilder();
 		Entry[] children = node.getChildren();
@@ -195,8 +218,9 @@ public class BTreeHelper<Key extends Comparable<Key>, Value> {
 			}
 		} else {
 			for (int j = 0; j < node.getChildNum(); j++) {
-				if (j > 0)
+				if (j > 0) {
 					s.append(indent + "(" + children[j].getKey() + ")\n");
+				}					
 				s.append(toString(children[j].getNext(), height - 1, indent + "     "));
 			}
 		}
