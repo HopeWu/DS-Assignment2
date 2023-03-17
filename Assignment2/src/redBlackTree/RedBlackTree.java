@@ -7,7 +7,7 @@ import tree.Tree;
 
 /**
  * 
- * @author Dashp
+ * @author Prateek Dash
  * 
  * Properties of Red black tree.
  * 
@@ -17,10 +17,12 @@ import tree.Tree;
  * 4. If a node is red, then both its children are black.
  * 5. For each node, all simple paths from the node to descendant leaves contain the
  *    same number of black nodes.
+ *    
+ *   Red Black Tree is a special case of binary search tree  
  *
  */
 
-public class RedBlackTree extends Tree{
+public class RedBlackTree extends Tree {
 	
 	public RedBlackNode buildTree(Person[] personData) {
 		insert(personData);
@@ -39,7 +41,7 @@ public class RedBlackTree extends Tree{
 	       root.isBlack = true;
 	       size++;
 	       return;
-	       }
+	    }
 
 	    insertPerson(root, node);
 	    size++;
@@ -47,26 +49,30 @@ public class RedBlackTree extends Tree{
 	
 	private void insertPerson(RedBlackNode parent, RedBlackNode newNode) {
 		 // Can be >= if you adding duplicate keys
-        if(newNode != null && parent != null){
+        if(newNode != null && parent != null) {
         if(newNode.person.dna.isGreaterThan(parent.person.dna)) {
             if(parent.right == null) {
                 parent.right = newNode;
                 newNode.parent = parent;
                 newNode.isLeftChild = false;
-                return;
+                checkColor(newNode);
             }
-        } else{
-        	insertPerson(parent.right, newNode);
-        if (parent.left == null) {
-            parent.left = newNode;
-            newNode.parent = parent;
-            newNode.isLeftChild = true;
-            return;
-        }
-        insertPerson(parent.left, newNode);
-    }
-        checkColor(newNode);
-}
+            else {
+            	insertPerson(parent.right, newNode);
+            }
+        } 
+        else {
+        	if (parent.left == null) {
+        		parent.left = newNode;
+        		newNode.parent = parent;
+        		newNode.isLeftChild = true;
+                checkColor(newNode);
+        	}
+        	else {
+        	insertPerson(parent.left, newNode);
+        	}
+         }
+       }
 	}
 	
 	public void checkColor(RedBlackNode node){
@@ -84,7 +90,7 @@ public class RedBlackTree extends Tree{
     public void correctTree(RedBlackNode node) {
         if(node.parent.isLeftChild){
             // aunt is parent.parent.right 
-            if(node.parent.parent.right == null || node.parent.parent.right.isBlack){
+            if(node!= null && node.parent!= null && node.parent.parent!=null && (node.parent.parent.right == null || node.parent.parent.right.isBlack)){
                  rotate(node);
             }
             else if(node.parent.parent != null && node.parent.parent.right != null ) {
@@ -96,10 +102,10 @@ public class RedBlackTree extends Tree{
             }
         } else {
         // aunt is grandparent.left
-        if(node.parent.parent.left == null || node.parent.parent.left.isBlack) {
+        if(node!= null && node.parent!= null && node.parent.parent!=null && (node.parent.parent.left == null || node.parent.parent.left.isBlack)) {
              rotate(node);
         }
-        else if(node.parent.parent.left != null ) {
+        else if(node!= null && node.parent!= null && node.parent.parent!=null && node.parent.parent.left != null ) {
             node.parent.parent.left.isBlack = true;
             node.parent.parent.isBlack = false;
             node.parent.isBlack = true;
@@ -261,4 +267,8 @@ public class RedBlackTree extends Tree{
 
 	RedBlackNode root;
     int size;
+    
+    public static void main(String[] args) {
+    	System.out.println("Hello World");
+    }
 }
