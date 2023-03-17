@@ -5,6 +5,21 @@ import personPackage.Person;
 import personPackage.DNA;
 import tree.Tree;
 
+/**
+ * 
+ * @author Dashp
+ * 
+ * Properties of Red black tree.
+ * 
+ * 1. Every node is either red or black.
+ * 2. The root is black.
+ * 3. Every leaf (NIL) is black.
+ * 4. If a node is red, then both its children are black.
+ * 5. For each node, all simple paths from the node to descendant leaves contain the
+ *    same number of black nodes.
+ *
+ */
+
 public class RedBlackTree extends Tree{
 	
 	public RedBlackNode buildTree(Person[] personData) {
@@ -214,9 +229,34 @@ public class RedBlackTree extends Tree{
 
 	@Override
 	public Person lookup(DNA dna) {
-		// TODO Auto-generated method stub
-		return null;
+		RedBlackNode searchNode = search(root, dna.get());
+		return (searchNode == null) ? null : searchNode.person;
 	}
+	
+	/**
+     * Searches for a node in the Red Black tree with the given DNA using a recursive
+     * depth-first search. Returns the node with the given DNA, or null if no
+     * such node exists in the tree.
+     *
+     * @param node The root node of the subtree to search.
+     * @param gene The DNA of the person to search for.
+     * @return The node containing the person with the given DNA, or null if no
+     * such node exists in the tree.
+     */
+    private RedBlackNode search(RedBlackNode node, String gene) {
+        if (node == null|| node.person.dna.equals(gene)) {
+            return node;
+        }
+
+        int cmp = gene.compareTo(node.person.dna.get());
+        if (cmp < 0) {
+            return search(node.left, gene);
+        } else if (cmp > 0) {
+            return search(node.right, gene);
+        } else {
+            return node;
+        }
+    }
 
 
 	RedBlackNode root;
