@@ -1,10 +1,12 @@
 package personPackage;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Person {
+public class Person implements Serializable {
 	
+	private static final long serialVersionUID = -473474148924379651L;
 	public String name;
 	public Person spouse;
 	public LocalDate birthday;
@@ -13,8 +15,8 @@ public class Person {
 	public String gender;
 	public DNA dna;
 	
-	ArrayList<Person> children;
-	ArrayList<Person> parents;
+	public ArrayList<Person> children;
+	public ArrayList<Person> parents;
 	
 	public ArrayList<Person> getChildren() {
 		return children;

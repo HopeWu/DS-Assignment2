@@ -28,6 +28,11 @@ import tree.Tree;
 
 public class RedBlackTree extends Tree {
 	
+	
+	/**
+	 * For unit testing purpose.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Dataset ds = null;
 		try {
