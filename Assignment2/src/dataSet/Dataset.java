@@ -6,30 +6,54 @@ import java.time.Period;
 
 import personPackage.Person;
 
+/**
+ * To generate testing data of specified size. The data comes in the form of an array of Person objects.
+ * @author haopengwu
+ *
+ */
 public class Dataset {
 
-	// the number of the dataset, i.e. how many people there are in the dataset
+	/**
+	 * the number of the dataset, i.e. how many people there are in the dataset
+	 */
 	private int population;
-	// how likely a man will have children, doesn't reflect the final proportion of
-	// fathers
+	 
+	/**
+	 * how likely a man will have children, doesn't reflect the final proportion of
+	 * fathers. Didn't use this.
+	 */
 	private double relationRate;
-	//
+	/**
+	 * To provide random services for some of the methods. For example, randomly choosing children and the number of children.
+	 */
 	private Random random;
 
-	// generate an array to hold the data
+	/**
+	 * Will be returned as the testing data.
+	 */
 	Person[] people;
 
+	/**
+	 * To test this class.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		/**
 		 * For testing
 		 */
 		Dataset dataset = null;
 		try {
+			/**
+			 * Specify the size and create the Dataset object.
+			 */
 			dataset = new Dataset(1000);
 		} catch (DataScaleTooSmallException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		/**
+		 * Get the testing data.
+		 */
 		Person[] people = dataset.getData();
 		for (int i = 0; i < people.length; ++i) {
 			System.out.print(i + " ");
@@ -37,6 +61,11 @@ public class Dataset {
 		}
 	}
 
+	/**
+	 * Create a Dataset obeject.
+	 * @param scale, the size of the data
+	 * @throws DataScaleTooSmallException, we don't allow the data size be too small. Specifically, smaller than 6.
+	 */
 	public Dataset(int scale) throws DataScaleTooSmallException {
 		super();
 		if (scale < 6 ) throw new DataScaleTooSmallException("Error! Dataset is too small.");
@@ -54,8 +83,14 @@ public class Dataset {
 		this.random = new Random();
 	}
 
+	/**
+	 * Set the relationRate, not used.
+	 * @param relationRate
+	 */
 	public void setRelationRate(double relationRate) {
-		// turn relationRate into a percentage
+		/**
+		 * turn relationRate into a percentage
+		 */
 		while (relationRate > 1)
 			relationRate /= 10;
 		this.relationRate = relationRate;
@@ -67,11 +102,11 @@ public class Dataset {
 	
 	
 	/**
-	 * The returned data is a bunch of PersonNode, with their blood relationship
+	 * The returned data is a bunch of Person objects, with their blood relationship
 	 * built in. They don't necessarily share one single ancestor. In other words,
-	 * they are a forest consist of many trees.
+	 * they are a forest consisting of many trees.
 	 * 
-	 * @return a bunch of PersonNode, with their blood relationship built in.
+	 * @return an array of Person, with their blood relationship built in.
 	 */
 
 	public Person[] getData() {
@@ -85,7 +120,7 @@ public class Dataset {
 	 */
 	public void generateData() {
 		/**
-		 * Create all the Person objects.
+		 * Create all the Person objects, set their birthplace as India, nationality as Indian and a random DNA
 		 */
 		int i = 0;
 		for (i = 0; i < population; ++i) {
@@ -104,51 +139,78 @@ public class Dataset {
 		LocalDate oldestBirthday;
 		Person spouse;
 		Person person;
+		/**
+		 * To keep trace of if a person has a parent so that we don't assign two biology fathers to one child. Nor mothers.
+		 */
 		HashMap<Person, Boolean> hasParents = new HashMap<Person, Boolean>();
-		// the first one sixth have no children
+		/**
+		 * the first one sixth have no children, they are meant to be randomly used as children for more randomness for this data set.
+		 */
 		int noChildren = population / 6;
 		Name name1, name2;
 		for (i = 0; i < population; ++i) {
-			// skip the first one sixth who will have no children
+			/**
+			 * skip the first one sixth who will have no children
+			 */
 			if (i < noChildren)
 				continue;
 			person = people[i];
-			// skip a person who has a spouse because we have assigned their children
+			/**
+			 * skip a person who has a spouse because we have assigned their children
+			 */
 			if (person.spouse != null)
 				continue;
-			// choose a spouse for this parent
+			/**
+			 * choose a spouse for this parent
+			 */
 			spouse = chooseSpouse(i);
-			// no spouse no children
+			/**
+			 * no spouse no children
+			 */
 			if (spouse == null)
 				continue;
-			// set the marriage relationship
+			/**
+			 * set the marriage relationship
+			 */
 			person.spouse = spouse;
 			spouse.spouse = person;
-			// set the couples' name and gender
+			/**
+			 * set the couples' name and gender
+			 */
 			name1 = gendernames.getAMaleName();
 			name2 = gendernames.getAFemaleName();
 			person.name = name1.getName();
 			person.gender = name1.getGender();
 			spouse.name = name2.getName();
 			spouse.gender = name2.getGender();
-			// choose children for this parent and set their birthdays
+			/**
+			 * choose children for this parent and set their birthdays
+			 */
 			children = getChildrenFor(i, hasParents);
-			// if no children, skip
+			/**
+			 * if no children, skip
+			 */
 			if (children == null || children.isEmpty())
 				continue;
-			// get the birthday of the oldest from children
+			/**
+			 * get the birthday of the oldest from children
+			 */
 			oldestBirthday = oldestBirthdayOf(children);
-			// set the parent's birthday that is N(23, 6) years earlier than the oldest
-			// child. as least 17 years older
-
+			/**
+			 * set the parent's birthday that is N(23, 6) years earlier than the oldest
+			 child. as least 17 years older
+			 */
 			person.birthday = oldestBirthday.minusYears(Math.max((long) random.nextGaussian(23, 6), 18))
 					.minusDays(random.nextLong(365));
-//			System.out.print(oldestBirthday + " ");
-//			System.out.println(person.birthday);
-			// set the spouse's birthday to N(partner's birthday, 2)
+
+			/**
+			 * set the spouse's birthday to N(partner's birthday, 2)
+			 */
 			spouse.birthday = person.birthday.plusYears((long) (random.nextGaussian(0, 2)))
 					.minusDays(random.nextLong(365));
-			// set the parents' children relationship
+			/**
+			 * set the parents' children relationship
+			 */
 			person.addChildren(children);
 			spouse.addChildren(children);
 			for (Person child : children) {
@@ -219,13 +281,19 @@ public class Dataset {
 		int howMany;
 		double odds = random.nextGaussian(0, 1);
 		if (odds < 0) {
-			// half of chance to get two children
+			/**
+			 * half of chance to get two children
+			 */
 			howMany = 2;
 		} else if (odds >= 0 || odds < 1) {
-			// 34% chance to get 1 child
+			/**
+			 * 34% chance to get 1 child
+			 */
 			howMany = 1;
 		} else {
-			// 16% chance to get 3 child
+			/**
+			 * 16% chance to get 3 child
+			 */
 			howMany = 3;
 		}
 		/**
@@ -236,7 +304,9 @@ public class Dataset {
 		LocalDate oldest = null;
 		LocalDate youngest = null;
 		Period duration;
-		// max of tries to get the children
+		/**
+		 * max of tries to get the children
+		 */
 		int maxTries = 5;
 		int times = 0;
 		int childIndex;
