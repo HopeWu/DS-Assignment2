@@ -1,6 +1,10 @@
 package redBlackTree;
 
 import personPackage.Person;
+import binarySearchTree.BSTNode;
+import binarySearchTree.BinarySearchTree;
+import dataSet.DataScaleTooSmallException;
+import dataSet.Dataset;
 import personPackage.DNA;
 import tree.Tree;
 
@@ -22,6 +26,25 @@ import tree.Tree;
  */
 
 public class RedBlackTree extends Tree {
+	
+	public static void main(String[] args) {
+		Dataset ds = null;
+		try {
+			ds = new Dataset(3000);
+			
+		} catch (DataScaleTooSmallException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Person[] people = ds.getData();
+		BinarySearchTree bst = new BinarySearchTree();
+		RedBlackTree rdt = new RedBlackTree();
+		bst.buildTree(people);
+		rdt.buildTree(people);
+		System.out.println(bst.getHeight());
+		System.out.println(rdt.getHeight());
+		System.out.println(rdt._getHeight(rdt.root));
+	}
 	
 	RedBlackNode root;
     
@@ -314,6 +337,12 @@ public class RedBlackTree extends Tree {
     }
 
 
-
+    public int _getHeight(RedBlackNode root) {
+		// null node does add to the height
+		if (root == null)
+			return 0;
+		// the height of this node is the higher child's height plus 1
+		return Math.max(_getHeight(root.left), _getHeight(root.right)) + 1;
+	}
 	
 }
