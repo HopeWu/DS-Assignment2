@@ -23,7 +23,7 @@ public class TestDrive {
 	 * Experiments with all type of trees
 	 */
 	private static void experimentAll() {		
-		System.out.println("Type, Data Size, Height, Build Tree (ms), Memory (bytes), Search 10000, Insert 10000");
+		System.out.println("Type, Data Size, Height, Build Tree (ms), Memory (bytes), Search (ms), Insert (ms)");
 		for (int size = 100000; size <= 1000000; size += 100000) {
 			Person[] people = readData(size);
 			if (people == null) {
@@ -33,12 +33,12 @@ public class TestDrive {
 			Tree avl = new AVLTree();
 			Tree bst = new BinarySearchTree();
 			Tree bTree = new BTree(14); 
-//			Tree redBlackTree = new RedBlackTree();
+			Tree redBlackTree = new RedBlackTree();
 			
 			experimentOne(avl, "AVL Tree", size, people);
 			experimentOne(bst, "Binary Search Tree", size, people);
 			experimentOne(bTree, "B-Tree", size, people);
-//			experimentOne(redBlackTree, "Red-Black Tree", size, people);
+			experimentOne(redBlackTree, "Red-Black Tree", size, people);
 		}
 		
 	}
