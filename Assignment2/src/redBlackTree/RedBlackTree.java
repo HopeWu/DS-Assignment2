@@ -47,15 +47,14 @@ public class RedBlackTree extends Tree {
 	    size++;
 	}
 	
-	private void insertPerson(RedBlackNode parent, RedBlackNode newNode) {
+	private void insertPerson(RedBlackNode parent, RedBlackNode newNode) {	
+		if(newNode == root || newNode == null) return;  
 		 // Can be >= if you adding duplicate keys
-        if(newNode != null && parent != null) {
         if(newNode.person.dna.isGreaterThan(parent.person.dna)) {
             if(parent.right == null) {
                 parent.right = newNode;
                 newNode.parent = parent;
                 newNode.isLeftChild = false;
-                checkColor(newNode);
             }
             else {
             	insertPerson(parent.right, newNode);
@@ -66,25 +65,22 @@ public class RedBlackTree extends Tree {
         		parent.left = newNode;
         		newNode.parent = parent;
         		newNode.isLeftChild = true;
-                checkColor(newNode);
         	}
         	else {
         	insertPerson(parent.left, newNode);
         	}
          }
-       }
+        checkColor(newNode);
 	}
 	
 	public void checkColor(RedBlackNode node){
         if(node == root) return;
-
+    
         if(node != null && !node.isBlack && node.parent != null && !node.parent.isBlack){
             correctTree(node);
-        }
-
-        // After resolving violations, need to check whether introduced any new violations.
-        if(node != null && node.parent != null)
-        checkColor(node.parent);
+            // After resolving violations, need to check whether introduced any new violations.
+            checkColor(node.parent);
+        }      
     }
 
     public void correctTree(RedBlackNode node) {
@@ -98,7 +94,6 @@ public class RedBlackTree extends Tree {
                 node.parent.parent.right.isBlack = true;
                 node.parent.parent.isBlack = false;
                 node.parent.isBlack = true;
-                return;
             }
         } else {
         // aunt is grandparent.left
@@ -109,41 +104,64 @@ public class RedBlackTree extends Tree {
             node.parent.parent.left.isBlack = true;
             node.parent.parent.isBlack = false;
             node.parent.isBlack = true;
-            return;
         } 
-        }
+      }
     }
 
     public void rotate(RedBlackNode node) {
         if(node.isLeftChild){
-            if(node.parent.isLeftChild) {
+            if(node.parent != null && node.parent.isLeftChild) {
+            	if(node.parent.parent != null) {
                 rightRotate(node.parent.parent);
                 node.isBlack = false;
                 node.parent.isBlack = true;
                 if(node.parent.right != null){
                     node.parent.right.isBlack = false;
                 }
-                return;
-            }
-            rightLeftRotate(node.parent.parent);  
-            // The node that we start with is the median value, hence set as black.
-            node.isBlack = true;
-            node.right.isBlack = false;
-            node.left.isBlack = false;
-            return;   
-        } else {
+            	}
+            } 
+            else {
+            	if(node.parent != null && node.parent.parent != null) {
+            		rightLeftRotate(node.parent.parent);  
+            		// The node that we start with is the median value, hence set as black.
+            		node.isBlack = true;
+            		if(node.right != null) {
+            		node.right.isBlack = false;
+            		}
+            		if(node.left != null ) {
+            			node.left.isBlack = false;
+            		  }
+            		}
+            	}
+        } 
+        else {
             if(node.parent.isLeftChild) {
+            	if(node.parent != null && node.parent.parent != null) {
                 leftRightRotate(node.parent.parent);
                 node.isBlack = true;
+                if(node.left != null) {
                 node.left.isBlack = false;
+                }
+                if(node.right != null) {
                 node.right.isBlack = false;
-                return;
+                }
             }
+            }
+            else {
+            if(node.parent != null && node.parent.parent != null) {
             leftRotate(node.parent.parent);
+            node.isBlack = false;
+            node.parent.isBlack = true;
+            if(node.parent.left != null){
+                node.parent.left.isBlack = false;    
+            }
+            }
         }
     }
+  }
 
     public void leftRotate(RedBlackNode node){
+    	if(node.right == null) return;
     	RedBlackNode temp = node.right;
         node.right = temp.left;
 
@@ -151,7 +169,7 @@ public class RedBlackTree extends Tree {
             node.right.parent = node;
             node.right.isLeftChild = false;
         }
-        if (node.parent == null){
+        else if (node.parent == null){
             // We are at the root node
             root = temp;
             temp.parent = null;
@@ -171,16 +189,18 @@ public class RedBlackTree extends Tree {
     }
 
     public void rightRotate(RedBlackNode node) {
+    	if(node.left == null) return;
     	RedBlackNode temp = node.left;
         node.left = temp.right;
         if(node.left != null){
             node.left.parent = node;
             node.left.isLeftChild = true;
         }
-        if(node.parent == null){
+        else if(node.parent == null){
             root = temp;
             temp.parent = null;
-        } else {
+        } 
+        else {
             temp.parent = node.parent;
             if(node.isLeftChild){
                 temp.parent.left = temp;
@@ -195,11 +215,13 @@ public class RedBlackTree extends Tree {
     }
 
     public void leftRightRotate(RedBlackNode node) {
+    	if(node == null || node.left == null) return;
         leftRotate(node.left);
         rightRotate(node);
     }
 
     public void rightLeftRotate(RedBlackNode node) {
+    	if(node == null || node.right == null) return;
         rightRotate(node.right);
         leftRotate(node);
     }
@@ -267,8 +289,4 @@ public class RedBlackTree extends Tree {
 
 	RedBlackNode root;
     int size;
-    
-    public static void main(String[] args) {
-    	System.out.println("Hello World");
-    }
 }
