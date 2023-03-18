@@ -12,7 +12,9 @@ public class RedBlackNode extends Node {
 	public boolean isBlack;
     public RedBlackNode(Person person){
     	this.person = person;
-        left = right = parent = null;
+        left =  null;
+        right = null;
+        parent = null;
         isBlack = false;
         isLeftChild = false;
     }

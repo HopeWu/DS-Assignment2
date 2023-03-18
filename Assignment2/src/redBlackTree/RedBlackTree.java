@@ -23,6 +23,8 @@ import tree.Tree;
 
 public class RedBlackTree extends Tree {
 	
+	RedBlackNode root;
+    
 	public RedBlackNode buildTree(Person[] personData) {
 		insert(personData);
 		return root;
@@ -38,42 +40,55 @@ public class RedBlackTree extends Tree {
 	    if(root == null) {
 	       root = node;
 	       root.isBlack = true;
-	       size++;
 	       return;
 	    }
-
-	    insertPerson(root, node);
-	    size++;
+	    
+	    RedBlackNode current = root;
+        RedBlackNode parent = null;
+        
+        while (current != null) {
+        	parent = current;
+            if (current.person.dna.isGreaterThan(person.dna)) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        
+	    insertPerson(parent, node);
 	}
 	
 	private void insertPerson(RedBlackNode parent, RedBlackNode newNode) {	
-		if(newNode == root || newNode == null) return;  
-		 // Can be >= if you adding duplicate keys
-        if(newNode.person.dna.isGreaterThan(parent.person.dna)) {
-            if(parent.right == null) {
-                parent.right = newNode;
-                newNode.parent = parent;
-                newNode.isLeftChild = false;
-            }
-            else {
-            	insertPerson(parent.right, newNode);
-            }
-        } 
-        else {
-        	if (parent.left == null) {
-        		parent.left = newNode;
-        		newNode.parent = parent;
-        		newNode.isLeftChild = true;
-        	}
-        	else {
-        	insertPerson(parent.left, newNode);
-        	}
-         }
-        checkColor(newNode);
+		if (newNode == root) {
+	        return;
+	    }
+
+	    if (parent == null) {
+	        root = newNode;
+	        root.isBlack = true;
+	        return;
+	    }
+
+	    // Can be >= if you're adding duplicate keys
+	    if (newNode.person.dna.isGreaterThan(parent.person.dna)) {
+	        parent.right = newNode;
+	        newNode.isLeftChild = false;
+	    } else {
+	        parent.left = newNode;
+	        newNode.isLeftChild = true;
+	    }
+
+	    newNode.parent = parent;
+	    correctTree(newNode);
 	}
 	
 	public void checkColor(RedBlackNode node){
-        if(node == root) return;
+		if (node == null) {
+            System.out.println("Node is null");
+            return;
+        }
+		
+		if(node == root) return;
     
         if(node != null && !node.isBlack && node.parent != null && !node.parent.isBlack){
             correctTree(node);
@@ -83,135 +98,147 @@ public class RedBlackTree extends Tree {
     }
 
     public void correctTree(RedBlackNode node) {
-        if(node.parent.isLeftChild){
-            // aunt is parent.parent.right 
-            if(node!= null && node.parent!= null && node.parent.parent!=null && (node.parent.parent.right == null || node.parent.parent.right.isBlack)){
-                 rotate(node);
-            }
-            else if(node.parent.parent != null && node.parent.parent.right != null ) {
-                // Color flip as the aunt is red
-                node.parent.parent.right.isBlack = true;
-                node.parent.parent.isBlack = false;
-                node.parent.isBlack = true;
-            }
-        } else {
-        // aunt is grandparent.left
-        if(node!= null && node.parent!= null && node.parent.parent!=null && (node.parent.parent.left == null || node.parent.parent.left.isBlack)) {
-             rotate(node);
-        }
-        else if(node!= null && node.parent!= null && node.parent.parent!=null && node.parent.parent.left != null ) {
-            node.parent.parent.left.isBlack = true;
-            node.parent.parent.isBlack = false;
-            node.parent.isBlack = true;
-        } 
-      }
+    	   if (node == null || node.parent == null) {
+    	        if (node != null) {
+    	            node.isBlack = true;
+    	        }
+    	        return;
+    	    }
+
+    	    if (node.parent.isBlack) {
+    	        return;
+    	    }
+
+    	    RedBlackNode grandparent = node.parent.parent;
+    	    if (grandparent == null) {
+    	        return;
+    	    }
+
+    	    RedBlackNode uncle = grandparent.left == node.parent ? grandparent.right : grandparent.left;
+
+    	    if (uncle != null && !uncle.isBlack) {
+    	        node.parent.isBlack = true;
+    	        uncle.isBlack = true;
+    	        grandparent.isBlack = false;
+    	        correctTree(grandparent);
+    	    } else {
+    	        boolean nodeIsLeftChild = node.parent != null && node.parent.isLeftChild;
+    	        boolean parentIsLeftChild = grandparent != null && grandparent.isLeftChild;
+
+    	        if (nodeIsLeftChild == parentIsLeftChild) {
+    	            if (node.parent != null) {
+    	                rotate(node.parent);
+    	            }
+    	        } else {
+    	            if (node != null) {
+    	                rotate(node);
+    	               
+    	            }
+    	        }
+
+    	        if (node.parent == null) {
+        	        return;
+        	    }
+    	        else{
+    	        	if(grandparent!=null) {
+    	        	node.parent.isBlack = true;
+        	        grandparent.isBlack = false;
+    	        	}
+    	        }
+    	        
+    	    }
     }
 
     public void rotate(RedBlackNode node) {
-        if(node.isLeftChild){
-            if(node.parent != null && node.parent.isLeftChild) {
-            	if(node.parent.parent != null) {
+    	if (node == null || node.parent == null) {
+            return;
+        }
+
+        boolean nodeIsLeftChild = node.parent != null && node.parent.isLeftChild;
+        boolean parentIsLeftChild = node.parent.parent != null && node.parent.parent.isLeftChild;
+
+        if (nodeIsLeftChild == parentIsLeftChild) {
+            if (nodeIsLeftChild) {
                 rightRotate(node.parent.parent);
-                node.isBlack = false;
-                node.parent.isBlack = true;
-                if(node.parent.right != null){
-                    node.parent.right.isBlack = false;
-                }
-            	}
-            } 
-            else {
-            	if(node.parent != null && node.parent.parent != null) {
-            		rightLeftRotate(node.parent.parent);  
-            		// The node that we start with is the median value, hence set as black.
-            		node.isBlack = true;
-            		if(node.right != null) {
-            		node.right.isBlack = false;
-            		}
-            		if(node.left != null ) {
-            			node.left.isBlack = false;
-            		  }
-            		}
-            	}
-        } 
-        else {
-            if(node.parent.isLeftChild) {
-            	if(node.parent != null && node.parent.parent != null) {
-                leftRightRotate(node.parent.parent);
-                node.isBlack = true;
-                if(node.left != null) {
-                node.left.isBlack = false;
-                }
-                if(node.right != null) {
-                node.right.isBlack = false;
-                }
+            } else {
+                leftRotate(node.parent.parent);
             }
-            }
-            else {
-            if(node.parent != null && node.parent.parent != null) {
-            leftRotate(node.parent.parent);
-            node.isBlack = false;
-            node.parent.isBlack = true;
-            if(node.parent.left != null){
-                node.parent.left.isBlack = false;    
-            }
+        } else {
+            if (nodeIsLeftChild) {
+                leftRotate(node.parent);
+                rightRotate(node.parent);
+            } else {
+                rightRotate(node.parent);
+                leftRotate(node.parent);
             }
         }
-    }
-  }
+     }
+  
 
     public void leftRotate(RedBlackNode node){
-    	if(node.right == null) return;
-    	RedBlackNode temp = node.right;
-        node.right = temp.left;
+    	if (node == null) {
+            return;
+        }
+        
+        RedBlackNode rightChild = node.right;
+        if (rightChild == null) {
+            return;
+        }
 
-        if(node.right != null) {
-            node.right.parent = node;
-            node.right.isLeftChild = false;
+        node.right = rightChild.left;
+        if (rightChild.left != null) {
+            rightChild.left.parent = node;
+            rightChild.left.isLeftChild = false;
         }
-        else if (node.parent == null){
-            // We are at the root node
-            root = temp;
-            temp.parent = null;
+
+        rightChild.parent = node.parent;
+
+        if (node.parent == null) {
+            root = rightChild;
+        } else if (node.isLeftChild) {
+            node.parent.left = rightChild;
+            rightChild.isLeftChild = true;
         } else {
-            temp.parent = node.parent;
-            if(node.isLeftChild){
-                temp.isLeftChild = true;
-                temp.parent.left = temp;
-            } else {
-                temp.isLeftChild = false;
-                temp.parent.right = temp;
-            }
+            node.parent.right = rightChild;
+            rightChild.isLeftChild = false;
         }
-        temp.left = node;
+
+        rightChild.left = node;
+        node.parent = rightChild;
         node.isLeftChild = true;
-        node.parent = temp;
     }
 
     public void rightRotate(RedBlackNode node) {
-    	if(node.left == null) return;
-    	RedBlackNode temp = node.left;
-        node.left = temp.right;
-        if(node.left != null){
-            node.left.parent = node;
-            node.left.isLeftChild = true;
+    	if (node == null) {
+            return;
         }
-        else if(node.parent == null){
-            root = temp;
-            temp.parent = null;
-        } 
-        else {
-            temp.parent = node.parent;
-            if(node.isLeftChild){
-                temp.parent.left = temp;
-                temp.isLeftChild = true;
-            } else {
-                temp.parent.right = temp;
-                temp.isLeftChild = false;
-            }
+        
+        RedBlackNode leftChild = node.left;
+        if (leftChild == null) {
+            return;
         }
-        temp.right = node;
-        node.parent = temp;
-    }
+
+        node.left = leftChild.right;
+        if (leftChild.right != null) {
+            leftChild.right.parent = node;
+            leftChild.right.isLeftChild = true;
+        }
+
+        leftChild.parent = node.parent;
+
+        if (node.parent == null) {
+            root = leftChild;
+        } else if (node.isLeftChild) {
+            node.parent.left = leftChild;
+            leftChild.isLeftChild = true;
+        } else {
+            node.parent.right = leftChild;
+            leftChild.isLeftChild = false;
+        }
+
+        leftChild.right = node;
+        node.parent = leftChild;
+        node.isLeftChild = false;    }
 
     public void leftRightRotate(RedBlackNode node) {
     	if(node == null || node.left == null) return;
@@ -241,17 +268,18 @@ public class RedBlackTree extends Tree {
 	}
 
 	public int getHeight() {
-		 if(root == null) return 0;
-        return height(root) - 1;
+		return height(root);
 	}
 	
 	private int height(RedBlackNode node){
-        if(node == null) return 0;
-        int leftHeight = height(node.left) + 1;
-        int rightHeight = height(node.right) + 1;
+		if (node == null) {
+	        return 0;
+	    }
 
-        if(leftHeight > rightHeight) return leftHeight;
-        return rightHeight;
+	    int leftHeight = height(node.left);
+	    int rightHeight = height(node.right);
+
+	    return Math.max(leftHeight, rightHeight) + (node.isBlack ? 1 : 0);
     }
 
 	@Override
@@ -286,6 +314,6 @@ public class RedBlackTree extends Tree {
     }
 
 
-	RedBlackNode root;
-    int size;
+
+	
 }
