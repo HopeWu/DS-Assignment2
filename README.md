@@ -1,5 +1,5 @@
 # DS-Assignment2
 - Haopeng Wu
-- Prateek Dash
 - Hong Zhou
+- Prateek Dash
 - Yan liu
